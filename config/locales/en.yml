@@ -1,0 +1,12 @@
+en:
+  activerecord:
+    errors:
+      models:
+        event_logging/event:
+          attributes:
+            stream_id:
+              blank: Event needs a stream id
+            aggregate_name:
+              blank: Event needs an aggregate name
+            action:
+              blank: Event needs an action

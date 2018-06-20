@@ -1,0 +1,1543 @@
+  [1m[35m (377.8ms)[0m  [1m[35mCREATE DATABASE "event_logging_dev" ENCODING = 'utf8'[0m
+  [1m[35m (340.5ms)[0m  [1m[35mCREATE DATABASE "event_logging_test" ENCODING = 'utf8'[0m
+  [1m[35m (20.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (8.7ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL)[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT pg_try_advisory_lock(1694471704349836755)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateWriteModels (1)
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (7.1ms)[0m  [1m[35mCREATE TABLE "write_models" ("id" bigserial primary key, "type" character varying, "name" character varying, "amount" integer, "is_valid" boolean, "available_at" timestamp)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "1"]]
+  [1m[35m (8.6ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateReadModels (2)
+  [1m[35m (1.0ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (6.8ms)[0m  [1m[35mCREATE TABLE "read_models" ("id" bigserial primary key, "write_model_id" integer, "save_count" integer)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.9ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "2"]]
+  [1m[35m (3.6ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateEventLoggingEvents (20180620171400)
+  [1m[35m (1.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (7.0ms)[0m  [1m[35mCREATE TABLE "event_logging_events" ("id" bigserial primary key, "stream_id" character varying NOT NULL, "aggregate_name" character varying NOT NULL, "action" character varying NOT NULL, "payload" jsonb DEFAULT '{}' NOT NULL, "created_at" timestamp NOT NULL)[0m
+  [1m[35m (4.3ms)[0m  [1m[35mCREATE  INDEX  "index_event_logging_events_on_stream_id" ON "event_logging_events"  ("stream_id")[0m
+  [1m[35m (5.2ms)[0m  [1m[35mCREATE  INDEX  "index_event_logging_events_on_aggregate_name" ON "event_logging_events"  ("aggregate_name")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (1.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20180620171400"]]
+  [1m[35m (5.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (1.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "test"], ["created_at", "2018-06-20 15:32:43.198797"], ["updated_at", "2018-06-20 15:32:43.198797"]]
+  [1m[35m (1.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT pg_advisory_unlock(1694471704349836755)[0m
+  [1m[35m (3.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Can_save_creation_in_events
+---------------------------------------------------------
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Can_save_creation_in_events
+---------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.2ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 15:52:25.735166"]]
+  [1m[36mEventLogging::Event Create (1.5ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "1"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"id\":[null,1],\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T15:52:25.735Z\"]}"], ["created_at", "2018-06-20 15:52:25.748355"]]
+  [1m[35m (1.5ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.1ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Can_save_creation_in_events
+---------------------------------------------------------
+  [1m[35m (1.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.6ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 15:54:03.980558"]]
+  [1m[36mEventLogging::Event Create (1.5ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "2"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"id\":[null,2],\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T15:54:03.980Z\"]}"], ["created_at", "2018-06-20 15:54:03.996354"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Load (0.9ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (2.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (1.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Can_save_creation_in_events
+---------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.3ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:02:42.095601"]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "3"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"id\":[null,3],\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:02:42.095Z\"]}"], ["created_at", "2018-06-20 16:02:42.117017"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (1.2ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------
+EventLogging::EventTest: test_Can_save_update_in_events
+-------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:02:42.163114"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "4"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"id\":[null,4],\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:02:42.163Z\"]}"], ["created_at", "2018-06-20 16:02:42.166707"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.9ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 4]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "4"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:02:42.174732"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (3.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------
+EventLogging::EventTest: test_Can_save_destroy_in_events
+--------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:02:42.188735"]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "5"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"id\":[null,5],\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:02:42.188Z\"]}"], ["created_at", "2018-06-20 16:02:42.192009"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "5"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:02:42.196120"]]
+  [1m[36mWriteModel Destroy (0.8ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 5]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------
+EventLogging::EventTest: test_Can_dispatch_event_to_read_models
+---------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.5ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:02:42.210117"]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "6"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"id\":[null,6],\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:02:42.210Z\"]}"], ["created_at", "2018-06-20 16:02:42.214481"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.0ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (1.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------
+EventLogging::EventTest: test_Can_dispatch_events
+-------------------------------------------------
+  [1m[35m (1.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.3ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:04:13.072240"]]
+  [1m[36mEventLogging::Event Create (3.4ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "7"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:04:13.072Z\"]}"], ["created_at", "2018-06-20 16:04:13.088695"]]
+  [1m[35m (1.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "7"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:04:13.097518"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------
+EventLogging::EventTest: test_Can_save_destroy_in_events
+--------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:04:13.116447"]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "8"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:04:13.116Z\"]}"], ["created_at", "2018-06-20 16:04:13.119489"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "8"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:04:13.123506"]]
+  [1m[36mWriteModel Destroy (0.9ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 8]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Can_save_creation_in_events
+---------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:04:13.133564"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "9"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:04:13.133Z\"]}"], ["created_at", "2018-06-20 16:04:13.136852"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (1.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------
+EventLogging::EventTest: test_Can_save_update_in_events
+-------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:04:13.148790"]]
+  [1m[36mEventLogging::Event Create (1.5ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "10"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:04:13.148Z\"]}"], ["created_at", "2018-06-20 16:04:13.152283"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.8ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 10]]
+  [1m[36mEventLogging::Event Create (0.7ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "10"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:04:13.158618"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------
+EventLogging::EventTest: test_Can_dispatch_events
+-------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:04:37.937472"]]
+  [1m[36mEventLogging::Event Create (1.4ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "11"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:04:37.937Z\"]}"], ["created_at", "2018-06-20 16:04:37.975265"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.7ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "11"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:04:37.980250"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (1.6ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------
+EventLogging::EventTest: test_Can_save_destroy_in_events
+--------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:04:37.997091"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "12"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:04:37.997Z\"]}"], ["created_at", "2018-06-20 16:04:38.000730"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.7ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "12"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:04:38.004770"]]
+  [1m[36mWriteModel Destroy (1.0ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 12]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------
+EventLogging::EventTest: test_Can_save_update_in_events
+-------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:04:38.014527"]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "13"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:04:38.014Z\"]}"], ["created_at", "2018-06-20 16:04:38.017374"]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.8ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 13]]
+  [1m[36mEventLogging::Event Create (0.7ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "13"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:04:38.022196"]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.6ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Can_save_creation_in_events
+---------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:04:38.028971"]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "14"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:04:38.028Z\"]}"], ["created_at", "2018-06-20 16:04:38.032137"]]
+  [1m[35m (0.9ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (1.3ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------
+EventLogging::EventTest: test_Can_dispatch_events
+-------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:05:06.174441"]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "15"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:05:06.174Z\"]}"], ["created_at", "2018-06-20 16:05:06.210866"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "15"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:05:06.215966"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (1.3ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Can_save_creation_in_events
+---------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:05:06.230212"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "16"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:05:06.230Z\"]}"], ["created_at", "2018-06-20 16:05:06.233621"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (2.2ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (3.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------
+EventLogging::EventTest: test_Can_save_update_in_events
+-------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:05:06.248204"]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "17"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:05:06.248Z\"]}"], ["created_at", "2018-06-20 16:05:06.252753"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (1.2ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 17]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "17"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:05:06.260709"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.9ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------
+EventLogging::EventTest: test_Can_save_destroy_in_events
+--------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:05:06.284873"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "18"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:05:06.284Z\"]}"], ["created_at", "2018-06-20 16:05:06.288312"]]
+  [1m[35m (1.4ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "18"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:05:06.293049"]]
+  [1m[36mWriteModel Destroy (0.9ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 18]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.0ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.3ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:08:56.740285"]]
+  [1m[36mEventLogging::Event Create (1.4ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "19"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:08:56.740Z\"]}"], ["created_at", "2018-06-20 16:08:56.786383"]]
+  [1m[36mReadModel Load (1.2ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 19], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 19], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 19]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.8ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 19]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "19"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:08:56.808958"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 19], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 19]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.9ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (3.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:08:56.825788"]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "20"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:08:56.825Z\"]}"], ["created_at", "2018-06-20 16:08:56.828951"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 20], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 20], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 20]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:08:56.839504"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "21"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:08:56.839Z\"]}"], ["created_at", "2018-06-20 16:08:56.842589"]]
+  [1m[36mReadModel Load (0.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 21], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 21], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.7ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 21]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "21"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:08:56.849868"]]
+  [1m[36mReadModel Load (0.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 21], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 21]]
+  [1m[36mWriteModel Destroy (0.7ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 21]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.6ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:08:56.860415"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "22"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:08:56.860Z\"]}"], ["created_at", "2018-06-20 16:08:56.863637"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 22], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.7ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 22], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.4ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 22]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.9ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:08:56.887580"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "23"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:08:56.887Z\"]}"], ["created_at", "2018-06-20 16:08:56.890743"]]
+  [1m[36mReadModel Load (0.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 23], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 23], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 23]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "23"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:08:56.898705"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 23], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 23]]
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:10:00.492696"]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "24"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:10:00.492Z\"]}"], ["created_at", "2018-06-20 16:10:00.513172"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 24], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.2ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 24], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 24]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "24"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:10:00.534081"]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 24], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 24]]
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:10:00.547701"]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "25"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:10:00.547Z\"]}"], ["created_at", "2018-06-20 16:10:00.550953"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 25], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.7ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 25], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 25]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:10:00.566893"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "26"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:10:00.566Z\"]}"], ["created_at", "2018-06-20 16:10:00.569920"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 26], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 26], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.7ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 26]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:10:00.581961"]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "27"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:10:00.581Z\"]}"], ["created_at", "2018-06-20 16:10:00.585546"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 27], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 27]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "27"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:10:00.594437"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (5.2ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 27]]
+  [1m[36mWriteModel Destroy (0.9ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 27]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:10:00.611339"]]
+  [1m[36mEventLogging::Event Create (1.5ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "28"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:10:00.611Z\"]}"], ["created_at", "2018-06-20 16:10:00.614647"]]
+  [1m[36mReadModel Load (0.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 28], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 28], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 28]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.8ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 28]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "28"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:10:00.625208"]]
+  [1m[36mReadModel Load (0.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 28], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 28]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.6ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:12:45.822707"]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.4ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.6ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:12:45.849395"]]
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:12:45.857700"]]
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (0.4ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:12:45.863902"]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.5ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:12:45.896915"]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:13:02.678862"]]
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "34"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:13:02.678Z\"]}"], ["created_at", "2018-06-20 16:13:02.723787"]]
+  [1m[36mReadModel Load (0.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 34], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 34], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 34]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:13:02.763728"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "35"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:13:02.763Z\"]}"], ["created_at", "2018-06-20 16:13:02.767656"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 35], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 35], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 35]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "35"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:13:02.776318"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 35], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 35]]
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "35"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:13:02.782944"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (1.2ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 35], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 35]]
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:13:02.793721"]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "36"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:13:02.793Z\"]}"], ["created_at", "2018-06-20 16:13:02.797605"]]
+  [1m[36mReadModel Load (1.0ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 36], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 36], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 36]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (1.0ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:13:02.822385"]]
+  [1m[36mEventLogging::Event Create (1.4ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "37"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:13:02.822Z\"]}"], ["created_at", "2018-06-20 16:13:02.825771"]]
+  [1m[36mReadModel Load (1.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 37], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.1ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 37], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.3ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 37]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (2.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "37"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["payload", nil], ["created_at", "2018-06-20 16:13:02.837394"]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (1.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (2.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:13:02.846128"]]
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "38"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:13:02.846Z\"]}"], ["created_at", "2018-06-20 16:13:02.854127"]]
+  [1m[36mReadModel Load (0.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 38], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 38], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.7ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 38]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.8ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 38]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "38"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:13:02.863660"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 38], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 38]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.6ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (1.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.6ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:14:58.523346"]]
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "39"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:14:58.523Z\"]}"], ["created_at", "2018-06-20 16:14:58.539278"]]
+  [1m[36mReadModel Load (1.3ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 39], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 39], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 39]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:14:58.565998"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "40"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:14:58.565Z\"]}"], ["created_at", "2018-06-20 16:14:58.569220"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 40], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 40], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 40]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:14:58.581779"]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "41"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:14:58.581Z\"]}"], ["created_at", "2018-06-20 16:14:58.584939"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 41], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 41], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 41]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "41"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:14:58.593554"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 41], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 41]]
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.3ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:14:58.606102"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "42"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:14:58.606Z\"]}"], ["created_at", "2018-06-20 16:14:58.609784"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 42], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 42], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 42]]
+  [1m[35m (1.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "42"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["payload", nil], ["created_at", "2018-06-20 16:14:58.618276"]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:14:58.628198"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "43"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:14:58.628Z\"]}"], ["created_at", "2018-06-20 16:14:58.631637"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 43], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 43], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 43]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (1.0ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 43]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "43"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:14:58.642108"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 43], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 43]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (1.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:15:24.212814"]]
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "44"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:15:24.212Z\"]}"], ["created_at", "2018-06-20 16:15:24.254247"]]
+  [1m[36mReadModel Load (3.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 44], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 44], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 44]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "44"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["payload", nil], ["created_at", "2018-06-20 16:15:24.290438"]]
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.4ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:15:24.306953"]]
+  [1m[36mEventLogging::Event Create (0.7ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "45"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:15:24.306Z\"]}"], ["created_at", "2018-06-20 16:15:24.309537"]]
+  [1m[36mReadModel Load (0.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 45], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.7ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 45], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.6ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 45]]
+  [1m[35m (0.4ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.6ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "45"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:15:24.315754"]]
+  [1m[35m (0.4ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.5ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 45], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.7ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 45]]
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.6ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (0.4ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:15:24.326072"]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "46"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:15:24.326Z\"]}"], ["created_at", "2018-06-20 16:15:24.328752"]]
+  [1m[36mReadModel Load (0.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 46], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.7ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 46], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.6ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 46]]
+  [1m[35m (0.4ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.4ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.7ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 46]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "46"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:15:24.337686"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 46], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 46]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.6ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:15:24.347281"]]
+  [1m[36mEventLogging::Event Create (1.5ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "47"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:15:24.347Z\"]}"], ["created_at", "2018-06-20 16:15:24.351610"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 47], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.7ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 47], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 47]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.5ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.4ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:15:24.362970"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "48"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:15:24.362Z\"]}"], ["created_at", "2018-06-20 16:15:24.367138"]]
+  [1m[36mReadModel Load (0.5ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 48], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.7ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 48], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.7ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 48]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (0.5ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.2ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:08.412135"]]
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "49"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:08.412Z\"]}"], ["created_at", "2018-06-20 16:16:08.451275"]]
+  [1m[36mReadModel Load (0.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 49], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.4ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 49], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.2ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 49]]
+  [1m[35m (1.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "49"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:16:08.479335"]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (1.2ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 49], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 49]]
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:08.495194"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "50"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:08.495Z\"]}"], ["created_at", "2018-06-20 16:16:08.499044"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 50], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 50], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 50]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (1.0ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:08.528733"]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "51"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:08.528Z\"]}"], ["created_at", "2018-06-20 16:16:08.532888"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 51], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 51], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 51]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:08.552271"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "52"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:08.552Z\"]}"], ["created_at", "2018-06-20 16:16:08.555726"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 52], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 52], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 52]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "52"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:16:08.564472"]]
+  [1m[36mReadModel Load (1.0ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 52], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 52]]
+  [1m[36mWriteModel Destroy (0.8ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 52]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.9ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.2ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:08.577596"]]
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "53"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:08.577Z\"]}"], ["created_at", "2018-06-20 16:16:08.581765"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 53], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 53], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 53]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (1.0ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 53]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "53"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:16:08.593094"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 53], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 53]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.9ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.1ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.3ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:32.647444"]]
+  [1m[36mEventLogging::Event Create (2.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "54"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:32.647Z\"]}"], ["created_at", "2018-06-20 16:16:32.663874"]]
+  [1m[36mReadModel Load (1.0ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 54], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.7ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 54], ["save_count", 0]]
+  [1m[36mReadModel Update All (2.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 54]]
+  [1m[35m (0.9ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "54"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["payload", nil], ["created_at", "2018-06-20 16:16:32.690523"]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.5ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:32.697901"]]
+  [1m[36mEventLogging::Event Create (1.5ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "55"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:32.697Z\"]}"], ["created_at", "2018-06-20 16:16:32.702435"]]
+  [1m[36mReadModel Load (0.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 55], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.4ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 55], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 55]]
+  [1m[35m (2.9ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (1.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:32.723940"]]
+  [1m[36mEventLogging::Event Create (2.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "56"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:32.723Z\"]}"], ["created_at", "2018-06-20 16:16:32.727969"]]
+  [1m[36mReadModel Load (2.0ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 56], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.2ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 56], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.4ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 56]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (1.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:32.747120"]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "57"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:32.747Z\"]}"], ["created_at", "2018-06-20 16:16:32.751717"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 57], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 57], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 57]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.5ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.8ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 57]]
+  [1m[36mEventLogging::Event Create (0.8ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "57"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:16:32.761871"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 57], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 57]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:32.773238"]]
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "58"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:32.773Z\"]}"], ["created_at", "2018-06-20 16:16:32.776462"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 58], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.1ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 58], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 58]]
+  [1m[35m (0.9ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "58"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:16:32.786559"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 58], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 58]]
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:55.713288"]]
+  [1m[36mEventLogging::Event Create (1.4ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "59"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:55.713Z\"]}"], ["created_at", "2018-06-20 16:16:55.755808"]]
+  [1m[36mReadModel Load (1.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 59], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.1ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 59], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 59]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (2.0ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:55.791972"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "60"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:55.791Z\"]}"], ["created_at", "2018-06-20 16:16:55.795844"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 60], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 60], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 60]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "60"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:16:55.804617"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 60], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 60]]
+  [1m[36mWriteModel Destroy (3.7ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 60]]
+  [1m[35m (1.3ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (1.0ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:55.834672"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "61"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:55.834Z\"]}"], ["created_at", "2018-06-20 16:16:55.838164"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 61], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 61], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 61]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (1.0ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (1.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:55.853460"]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "62"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:55.853Z\"]}"], ["created_at", "2018-06-20 16:16:55.857969"]]
+  [1m[36mReadModel Load (1.0ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 62], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.1ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 62], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.5ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 62]]
+  [1m[35m (1.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (1.0ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 62]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "62"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:16:55.871039"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 62], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 62]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:16:55.884005"]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "63"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:16:55.884Z\"]}"], ["created_at", "2018-06-20 16:16:55.887476"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 63], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 63], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 63]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "63"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:16:55.896423"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 63], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 63]]
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:31:50.241979"]]
+  [1m[36mEventLogging::Event Create (1.3ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "64"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:31:50.241Z\"]}"], ["created_at", "2018-06-20 16:31:50.283977"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 64], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 64], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 64]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "64"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:31:50.306492"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 64], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 64]]
+  [1m[36mWriteModel Destroy (1.1ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 64]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.9ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:31:50.323271"]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "65"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:31:50.323Z\"]}"], ["created_at", "2018-06-20 16:31:50.327034"]]
+  [1m[36mReadModel Load (0.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 65], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 65], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 65]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "65"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:31:50.335961"]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 65], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.8ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 65]]
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (2.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.0ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:31:50.349336"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "66"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:31:50.349Z\"]}"], ["created_at", "2018-06-20 16:31:50.352977"]]
+  [1m[36mReadModel Load (1.5ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 66], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 66], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 66]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:31:50.381539"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "67"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:31:50.381Z\"]}"], ["created_at", "2018-06-20 16:31:50.385741"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 67], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 67], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 67]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.9ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 67]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "67"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:31:50.396177"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 67], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 67]]
+  [1m[35m (2.9ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:31:50.410560"]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "68"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:31:50.410Z\"]}"], ["created_at", "2018-06-20 16:31:50.414000"]]
+  [1m[36mReadModel Load (0.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 68], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 68], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 68]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+----------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_stream_id_is_invalid
+----------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_creation_in_events
+---------------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (1.1ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:32:49.701375"]]
+  [1m[36mEventLogging::Event Create (1.1ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "69"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:32:49.701Z\"]}"], ["created_at", "2018-06-20 16:32:49.715848"]]
+  [1m[36mReadModel Load (0.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 69], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.2ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 69], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 69]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.8ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (3.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (1.1ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_aggregate_name_is_invalid
+---------------------------------------------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_dispatch_events
+-------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.7ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:32:49.750047"]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "70"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:32:49.750Z\"]}"], ["created_at", "2018-06-20 16:32:49.752960"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 70], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 70], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 70]]
+  [1m[35m (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (0.9ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "70"], ["aggregate_name", "WriteModel"], ["action", "custom_action"], ["payload", "{\"the\":\"payload\"}"], ["created_at", "2018-06-20 16:32:49.761658"]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mReadModel Load (0.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 70], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 70]]
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.5ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+--------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_destroy_in_events
+--------------------------------------------------------------------
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:32:49.773538"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "71"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:32:49.773Z\"]}"], ["created_at", "2018-06-20 16:32:49.776816"]]
+  [1m[36mReadModel Load (0.9ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 71], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.8ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 71], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 71]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "created_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["stream_id", "71"], ["aggregate_name", "WriteModel"], ["action", "destroy"], ["created_at", "2018-06-20 16:32:49.786090"]]
+  [1m[36mReadModel Load (1.6ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 71], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 71]]
+  [1m[36mWriteModel Destroy (0.9ms)[0m  [1m[31mDELETE FROM "write_models" WHERE "write_models"."id" = $1[0m  [["id", 71]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.7ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.6ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------------
+EventLogging::EventTest: test_Write_model_can_save_update_in_events
+-------------------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.8ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:32:49.799437"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "72"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:32:49.799Z\"]}"], ["created_at", "2018-06-20 16:32:49.802980"]]
+  [1m[36mReadModel Load (0.8ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 72], ["LIMIT", 1]]
+  [1m[36mReadModel Create (0.9ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 72], ["save_count", 0]]
+  [1m[36mReadModel Update All (0.9ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 72]]
+  [1m[35m (0.6ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Update (0.9ms)[0m  [1m[33mUPDATE "write_models" SET "name" = $1 WHERE "write_models"."id" = $2[0m  [["name", "the_new_name"], ["id", 72]]
+  [1m[36mEventLogging::Event Create (1.2ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "72"], ["aggregate_name", "WriteModel"], ["action", "update"], ["payload", "{\"name\":[\"the_name\",\"the_new_name\"]}"], ["created_at", "2018-06-20 16:32:49.813292"]]
+  [1m[36mReadModel Load (0.7ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 72], ["LIMIT", 1]]
+  [1m[36mReadModel Update All (1.0ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 72]]
+  [1m[35m (0.7ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "event_logging_events"[0m
+  [1m[36mEventLogging::Event Load (0.9ms)[0m  [1m[34mSELECT  "event_logging_events".* FROM "event_logging_events" ORDER BY "event_logging_events"."created_at" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.8ms)[0m  [1m[35mBEGIN[0m
+---------------------------------------------------------
+EventLogging::EventTest: test_Read_model_can_handle_event
+---------------------------------------------------------
+  [1m[35m (0.8ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mWriteModel Create (0.9ms)[0m  [1m[32mINSERT INTO "write_models" ("name", "is_valid", "available_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "the_name"], ["is_valid", false], ["available_at", "2018-06-20 16:32:49.826328"]]
+  [1m[36mEventLogging::Event Create (1.0ms)[0m  [1m[32mINSERT INTO "event_logging_events" ("stream_id", "aggregate_name", "action", "payload", "created_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["stream_id", "73"], ["aggregate_name", "WriteModel"], ["action", "create"], ["payload", "{\"name\":[null,\"the_name\"],\"is_valid\":[null,false],\"available_at\":[null,\"2018-06-20T16:32:49.826Z\"]}"], ["created_at", "2018-06-20 16:32:49.829803"]]
+  [1m[36mReadModel Load (1.1ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" WHERE "read_models"."id" = $1 LIMIT $2[0m  [["id", 73], ["LIMIT", 1]]
+  [1m[36mReadModel Create (1.0ms)[0m  [1m[32mINSERT INTO "read_models" ("id", "save_count") VALUES ($1, $2) RETURNING "id"[0m  [["id", 73], ["save_count", 0]]
+  [1m[36mReadModel Update All (1.1ms)[0m  [1m[33mUPDATE "read_models" SET "save_count" = COALESCE("save_count", 0) + 1 WHERE "read_models"."id" = $1[0m  [["id", 73]]
+  [1m[35m (0.8ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (2.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "read_models"[0m
+  [1m[36mReadModel Load (1.2ms)[0m  [1m[34mSELECT  "read_models".* FROM "read_models" ORDER BY "read_models"."id" ASC LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[35m (1.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.7ms)[0m  [1m[35mBEGIN[0m
+-------------------------------------------------------------
+EventLogging::EventTest: test_Event_without_action_is_invalid
+-------------------------------------------------------------
+  [1m[35m (0.9ms)[0m  [1m[31mROLLBACK[0m
+  [1m[35m (0.5ms)[0m  [1m[35mBEGIN[0m
+------------------------------
+EventLogging::Test: test_truth
+------------------------------
+  [1m[35m (0.7ms)[0m  [1m[31mROLLBACK[0m
