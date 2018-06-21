@@ -2,7 +2,7 @@
 
 Plugin for event logging in rails application.
 
-Read our article[https://medium.com/snapp-fr/event-logging-b509b275f80f] (sorry French only)
+Read our [article](https://medium.com/snapp-fr/event-logging-b509b275f80f) (sorry French only)
 
 ## Installation
 
